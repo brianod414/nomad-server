@@ -11,7 +11,12 @@ import dayIcon from '../../../assets/sunny-day.svg'
 
 const InfoCard = props => {
   const { name, model, probe, available, nightAllowance, dayAllowance, rackOpen } = props.data
-  const { busyUntil, dayExpt, nightExpt } = props.data.status.summary
+  const { busyUntil, dayExpt, nightExpt, timedExperimentEndTime } = props.data.status.summary
+
+  const formattedTimedExperimentEndTime = timedExperimentEndTime
+    ? moment(timedExperimentEndTime).format('DD/MM/YYYY HH:mm')
+    : null
+
   let cardColor = available ? '#52c41a' : '#ff4d4f'
   let cardBackgroundColor = available ? '#f6ffed' : '#fff1f0'
 
@@ -61,6 +66,18 @@ const InfoCard = props => {
             busyUntil
           )}
         </div>
+
+        <div style={{ marginTop: 4 }}>
+          <strong>Timed experiments: </strong>
+          {formattedTimedExperimentEndTime ? (
+            <Tag color='blue' style={{ fontWeight: '700' }}>
+              Until {formattedTimedExperimentEndTime}
+            </Tag>
+          ) : (
+            <Tag color='default'>None</Tag>
+          )}
+        </div>
+
         <Row justify='center' align='middle'>
           <Col span={11} offset={2}>
             <strong>Expt Queue</strong>
@@ -69,6 +86,7 @@ const InfoCard = props => {
             <strong>Allowance</strong>
           </Col>
         </Row>
+
         <Row justify='center' align='middle' style={{ marginTop: 2 }}>
           <Col span={2}>
             <img src={dayIcon} style={{ height: '18px' }} alt='day icon' />
@@ -76,6 +94,7 @@ const InfoCard = props => {
           <Col span={11}>{dayExpt}</Col>
           <Col span={11}>{moment.duration(dayAllowance, 'm').format('HH:mm', { trim: false })}</Col>
         </Row>
+
         <Row justify='center' align='middle' style={{ marginTop: 2 }}>
           <Col span={2}>
             <img src={nightIcon} style={{ height: '18px' }} alt='night icon' />
@@ -89,5 +108,6 @@ const InfoCard = props => {
     </Card>
   )
 }
+
 
 export default InfoCard
